@@ -1,0 +1,75 @@
+﻿@page "/"
+@using Microsoft.AspNetCore.SignalR
+@using Microsoft.AspNetCore.SignalR.Client
+@inject NavigationManager Navigation
+@implements IAsyncDisposable
+
+<h1>Netzsch WebApp</h1>
+
+<div class="form-group">
+    <label>Output:</label>
+    <input type="text" class="form-control w-50" @bind="messageOutput"/>
+</div>
+
+<div class="form-group">
+
+    <label>Input:</label>
+    <input type="text" class="form-control w-50" @bind="messageInput" />
+
+</div>
+
+<button @onclick="Send" disabled="@(!IsConnected)">Send</button>
+
+<hr>
+
+
+@code {
+    private HubConnection hubConnection;
+    private string messageOutput;
+    private string messageInput;
+    private string clientConnectionID;
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        hubConnection = new HubConnectionBuilder()
+            .WithUrl(Navigation.ToAbsoluteUri("/netzschhub"))
+            .Build();
+
+        hubConnection.On<string>("ReceiveMessage", (message) =>
+        {
+            messageOutput = message;
+            InvokeAsync(StateHasChanged);
+        });
+
+        await hubConnection.StartAsync().ContinueWith((task) =>
+        {
+            if (task.Exception != null)
+            {
+                throw task.Exception;
+            }
+
+        });
+
+        clientConnectionID = hubConnection.ConnectionId;
+    }
+
+    private async Task Send()
+    {
+        if (hubConnection !=  null)
+        {
+            await hubConnection.SendAsync("ReceiveMessage", clientConnectionID, messageInput);
+        }
+    }
+
+    public bool IsConnected =>
+        hubConnection?.State == HubConnectionState.Connected;
+
+    public async ValueTask DisposeAsync()
+    {
+        if (hubConnection != null)
+        {
+            await hubConnection.DisposeAsync();
+        }
+    }
+}
