@@ -1,0 +1,25 @@
+Steps to Build and Run:
+
+- You will need Visual Studio 2019 and .net core 3.1 installed to build the solutions locally.
+
+- Application 2 is the Blazor web app so build it in Visual Studio and make sure that before 
+Running in Visual Studio, in the options beside the Debug/Release button:
+"WebIOApp" is selected instead of "IIExpress".
+
+- Upon running the web page should open with https://localhost:5001
+
+- Application 1 is a normal WPF Desktop app so build it in Visual 
+Studio and run it usually. Note: For a successful connection, 
+the Web App must be already running before starting this App, 
+otherwise connect manually using the "Connect" 
+button once the Web App is running.
+
+- Connection will fail, if the server URL does not match. There is an option to enter 
+the URL manually. Just enter the actual localhost URL of the 
+Web App along with the extension "/netzschhub" and press the "Connect" button.
+
+- Multiple instances of Desktop Apps can be created keeping the above steps in mind.
+
+-Entering any value in the input field of any of the Desktop instances will immidialtey 
+update the Web App Output field and of the other running Apps. Vice-Versa is also true, 
+but after pressing the "Send" Button on the Web Page
