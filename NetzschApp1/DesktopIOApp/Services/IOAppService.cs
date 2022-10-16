@@ -33,7 +33,7 @@ namespace DesktopIOApp.Services
         public IOAppService(HubConnection connection, string _url)
         {
             _connection = connection;
-            _connection.On<string>("ReceiveMessage", (msg) => MessageReceived?.Invoke(msg));
+            _connection.On<string>("ReceiveWebMessage", (msg) => MessageReceived?.Invoke(msg));
             _serverUrl = _url;
         }
 
@@ -100,7 +100,7 @@ namespace DesktopIOApp.Services
         public async Task SendMessage(string message)
         {
             if (_connection.State == HubConnectionState.Connected)
-                await _connection?.SendAsync("ReceiveMessage", _connection.ConnectionId, message);
+                await _connection?.SendAsync("SendDesktopMessage", _connection.ConnectionId, message);
         }
     }
 }

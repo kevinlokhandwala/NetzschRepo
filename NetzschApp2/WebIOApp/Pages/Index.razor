@@ -36,7 +36,7 @@
             .WithUrl(Navigation.ToAbsoluteUri("/netzschhub"))
             .Build();
 
-        hubConnection.On<string>("ReceiveMessage", (message) =>
+        hubConnection.On<string>("ReceiveDesktopMessage", (message) =>
         {
             messageOutput = message;
             InvokeAsync(StateHasChanged);
@@ -58,7 +58,7 @@
     {
         if (hubConnection !=  null)
         {
-            await hubConnection.SendAsync("ReceiveMessage", clientConnectionID, messageInput);
+            await hubConnection.SendAsync("SendWebMessage", clientConnectionID, messageInput);
         }
     }
 

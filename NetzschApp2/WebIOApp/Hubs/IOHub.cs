@@ -10,15 +10,27 @@ namespace WebIOApp.Hubs
     {
 
         /// <summary>
-        /// Sends the received message to all the connected clients
+        /// Sends the received web message to all the connected Desktop clients
         /// </summary>
         /// <param name="sender">Client that sent the message</param>
         /// <param name="incomingMessage">Message from the sender</param>
         /// <returns></returns>
-        public async Task ReceiveMessage(string sender, string incomingMessage)
+        public async Task SendDesktopMessage(string sender, string incomingMessage)
         {
             //Send messagess to all the clients except the sender client itself
-            await Clients.AllExcept(sender).SendAsync("ReceiveMessage", incomingMessage);
+            await Clients.AllExcept(sender).SendAsync("ReceiveDesktopMessage", incomingMessage);
+        }
+
+        /// <summary>
+        /// Sends the received message from Desktop to all the connected web clients
+        /// </summary>
+        /// <param name="sender">Client that sent the message</param>
+        /// <param name="incomingMessage">Message from the sender</param>
+        /// <returns></returns>
+        public async Task SendWebMessage(string sender, string incomingMessage)
+        {
+            //Send messagess to all the clients except the sender client itself
+            await Clients.AllExcept(sender).SendAsync("ReceiveWebMessage", incomingMessage);
         }
     }
 }
